@@ -80,7 +80,7 @@ function ViewFeedbacks() {
                             <button disabled={isLoading} onClick={markAsNonConstructive} className="flex-1 bg-red-600 text-white py-4  rounded-lg">Non Constructive</button>
                             <button disabled={isLoading} onClick={markAsConstructive} className="flex-1 bg-green-600 text-white py-4 rounded-lg">Constructive</button>
                         </div>
-                        <p className="mt-1 text-gray-500 text-xs">Mark this feedback either as "Constructive" or "Non Constructive" to see the next feedback</p>
+                        <p className="mt-1 text-gray-500 text-xs">Mark this feedback either as &quot;Constructive&quot; or &quot;Non Constructive&quot; to see the next feedback</p>
                     </div>
 
                 </div>
