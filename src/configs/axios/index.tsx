@@ -5,7 +5,7 @@ export const AxiosClient = axios.create({
     baseURL: BASE_URL,
 });
 export const SelfAxiosClient = axios.create({
-    baseURL: "http://localhost:3000/api/",
+    baseURL: "/api/",
 });
 
 
