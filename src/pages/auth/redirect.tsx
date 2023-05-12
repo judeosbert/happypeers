@@ -128,7 +128,7 @@ function AuthRedirect() {
         return <>
         <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
             <MdNoAccounts size={90} />
-            <p className="font-medium text-lg">Account Not Found</p>
+            <p className="font-medium text-lg">Account Not Found!</p>
             <p className="text-center text-sm">Please check with admin at your organization.</p>
             <button onClick={()=>{
                 AuthUser.signOut()
@@ -146,7 +146,7 @@ function AuthRedirect() {
         </>
     }
 
-    if(pageState === PageStateInitial){
+if(pageState === PageStateInitial){
         return initialState()
     } else if(pageState === PageStateAccountNotFound){
         return renderAccountNotFound()
