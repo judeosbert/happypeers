@@ -18,6 +18,7 @@ import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { useEffect, useState } from 'react'
 import LoadingOverlay from 'react-loading-overlay';
 import { initAuth } from '@/initAuth'
+import Link from 'next/link'
 
 
 
@@ -226,8 +227,8 @@ function Home() {
             </div>
             <div className='flex flex-col'>
               <h2 className='text-l font-semibold'>Boring</h2>
-              <a href='/privacy-policy'>Privacy Policy</a>
-              <a href='/terms-conditions'>Terms and Conditions</a>
+              <Link href='/privacy-policy'>Privacy Policy</Link>
+              <Link href='/terms-conditions'>Terms and Conditions</Link>
             </div>
           </div>
         </main>
