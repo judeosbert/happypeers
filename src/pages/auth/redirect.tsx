@@ -130,6 +130,7 @@ function AuthRedirect() {
             <MdNoAccounts size={90} />
             <p className="font-medium text-lg">Account Not Found!</p>
             <p className="text-center text-sm">Please check with admin at your organization.</p>
+            <p className="text-center text-sm text-gray-400 font-semibold"><span className="font-normal">Logged in with </span>{fbUser?.email}</p>
             <button onClick={()=>{
                 AuthUser.signOut()
             }} className={"border-2 border-gray-200 px-5 py-2 mt-5 rounded-lg"}>Logout</button>

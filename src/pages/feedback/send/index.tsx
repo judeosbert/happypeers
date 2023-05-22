@@ -106,7 +106,7 @@ function ViewFeedbacks() {
                 <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
                     <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
                        
-                        <Link href={"/dashboard"}><p className='font-bold  text-2xl'>healthypeers</p></Link>
+                        <Link href={"/dashboard"}><p className='font-bold  text-2xl'>happypeers.work</p></Link>
                         <button onClick={user.signOut} className='border-2 border-gray-200 p-2 rounded-lg'>Logout</button>
                     </nav>
                     <section className="p-5">

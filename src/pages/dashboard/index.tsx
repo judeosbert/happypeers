@@ -127,7 +127,7 @@ function Dashboard() {
                     <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
                         <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
                            
-                            <p className='font-bold  text-2xl'>healthypeers</p>
+                            <p className='font-bold  text-2xl'>happypeers.work</p>
                             <div className="flex flex-row gap-2">
                                 {isAdmin?<button
                                 onClick={()=>{
@@ -138,7 +138,8 @@ function Dashboard() {
                             </div>
                         </nav>
                         <section className="p-5">
-                            <div className="flex flex-row gap-2">
+                            <p className="text-3xl font-thin">Hello {AuthUser.displayName?.split(" ")[0]},</p>
+                            <div className="flex flex-row gap-2 mt-5">
 
                                 <div className="flex-1 bg-white shadow border border-gray-200 rounded-xl p-5 flex flex-col justify-center items-center">
                                     <p className="text-xl">Feedbacks for you</p>
