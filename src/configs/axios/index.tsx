@@ -1,6 +1,6 @@
 import axios, { AxiosHeaders, AxiosInstance } from 'axios';
 import { TOKEN_KEY, firebaseAuth } from '../firebase';
-const BASE_URL = "https://api.onsheets.io/v1/"
+const BASE_URL = "https://happypeer-api-onsheets.up.railway.app/v1/"
 export const AxiosClient = axios.create({
     baseURL: BASE_URL,
 });
