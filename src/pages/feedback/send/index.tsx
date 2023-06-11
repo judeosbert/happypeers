@@ -123,7 +123,7 @@ function ViewFeedbacks() {
                                 </select>
                                 <textarea onChange={(e) => {
                                     setFeedback(e.target.value)
-                                }} id="feedbackArea" className="rounded-lg border p-2" placeholder="Mark your feedback here. Rememeber it shoyld be constructive">
+                                }} id="feedbackArea" className="rounded-lg border p-2" placeholder="Mark your feedback here. Rememeber it should be constructive">
                                     {feedback}
                                 </textarea>
 
