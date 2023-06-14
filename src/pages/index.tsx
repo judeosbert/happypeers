@@ -223,10 +223,10 @@ function Home() {
           <div className='bg-pbutton-500 px-10 pt-10 mt-10 text-white pb-10 flex flex-row justify-between'>
             <div>
               <p>Powered by</p>
-              <a href="#"><p className='text-5xl font-bold'>onsheets.io</p></a>
+              <a href="#"><p className='text-xl md:text-5xl font-bold'>onsheets.io</p></a>
             </div>
             <div className='flex flex-col'>
-              <h2 className='text-l font-semibold'>Boring</h2>
+              <h2 className='text-l font-bold'>Boring</h2>
               <Link href='/privacy-policy'>Privacy Policy</Link>
               <Link href='/terms-conditions'>Terms and Conditions</Link>
             </div>

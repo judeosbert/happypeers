@@ -45,6 +45,7 @@ async function createCompany(authUser:AuthUser,req:CreateCompanyReq){
         await AxiosClient.post("/append/Users", JSON.stringify({
             row: {
                 name: authUser.displayName,
+                uid:authUser.id,
                 company: domain,
                 email: authUser.email,
                 created_at: Date(),
