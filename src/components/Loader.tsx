@@ -27,7 +27,7 @@ export default function Loader(props:any){
 export function showError(message:string){
     Modal.error({
         centered:true,
-        title:"Heads up",
+        title:"Heads Up!",
         content:message,
         okType:"danger"
     
