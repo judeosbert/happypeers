@@ -17,9 +17,14 @@ export default async function getCompanyPeers(
   if (!token) {
     return res.status(400).json({ error: "missing token" });
   }
+  let user;
+  try {
+    user = await verifyIdToken(token);
+  } catch (e) {
+    return res.status(401).json({ error: "token expired" });
+  }
   try {
     console.log("token-feedback", token);
-    const user = await verifyIdToken(token);
     const userRes = await getPeers(user);
     return res.status(200).json(userRes);
   } catch (e) {
@@ -42,7 +47,7 @@ async function getPeers(authUser: AuthUser) {
           {
             column: "activated",
             filters: {
-              text_equals: "true",
+              text_equals: "TRUE",
             },
           },
           {

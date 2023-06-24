@@ -21,9 +21,13 @@ export default async function updateFeedback(
   if (!token) {
     return res.status(400).json({ error: "missing token" });
   }
+  let user;
   try {
-    console.log("token-feedback", token);
-    const user = await verifyIdToken(token);
+    user = await verifyIdToken(token);
+  } catch (e) {
+    return res.status(401).json({ error: "token expired" });
+  }
+  try {
     const body: UpdateFeedbackStatusReq = req.body;
     if (body.feedback.recipient != user.id) {
       return res.status(400).json({ error: "invalid request" });

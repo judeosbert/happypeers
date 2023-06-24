@@ -1,14 +1,15 @@
-import {AxiosClient} from "@/configs/axios";
-import {firebaseAuth, TOKEN_KEY} from "@/configs/firebase";
-import {initAuth} from "@/initAuth";
-import {CompanyResponse} from "@/models/company";
-import {UserResponse} from "@/models/user";
-import {AxiosResponse} from "axios";
-import {AuthAction, useAuthUser, withAuthUser} from "next-firebase-auth";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
-import {MdNoAccounts} from "react-icons/md"
-import {GiEarthCrack} from "react-icons/gi"
+import { AxiosClient } from "@/configs/axios";
+import { firebaseAuth, TOKEN_KEY } from "@/configs/firebase";
+import { initAuth } from "@/initAuth";
+import { CompanyResponse } from "@/models/company";
+import { UserResponse } from "@/models/user";
+import { AxiosResponse } from "axios";
+import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { MdNoAccounts } from "react-icons/md"
+import { GiEarthCrack } from "react-icons/gi"
+import { SyncLoader } from "react-spinners";
 
 initAuth()
 
@@ -27,8 +28,8 @@ function AuthRedirect() {
     const router = useRouter()
     const fbUser = firebaseAuth.currentUser
     const AuthUser = useAuthUser()
-    
-    const [pageState,setPageState] = useState(PageStateInitial)
+
+    const [pageState, setPageState] = useState(PageStateInitial)
 
     useEffect(() => {
         if (firebaseAuth.currentUser) {
@@ -109,54 +110,57 @@ function AuthRedirect() {
         const company = companyResponse.data.company[0]
         if (!company) {
             router.push("/setup")
-            throw("Company not setup")
+            throw ("Company not setup")
         }
         localStorage.setItem("is_admin", company.admin === email ? "true" : "false")
     }
-    
-    function initialState(){
+
+    function initialState() {
         return <>
-        <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
-            <p>...</p>
-            <p className="font-medium text-lg">Please wait</p>
-            <p className="text-center text-sm">Redirecting</p>
-        </main>
-        </>
-    }
-    
-    function renderAccountNotFound(){
-        return <>
-        <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
-            <MdNoAccounts size={90} />
-            <p className="font-medium text-lg">Account Not Found!</p>
-            <p className="text-center text-sm">Please check with admin at your organization.</p>
-            <p className="text-center text-sm text-gray-400 font-semibold"><span className="font-normal">Logged in with </span>{fbUser?.email}</p>
-            <button onClick={()=>{
-                AuthUser.signOut()
-            }} className={"border-2 border-gray-200 px-5 py-2 mt-5 rounded-lg"}>Logout</button>
-        </main>
-        </>
-    }
-    function renderInvalidApiResult(){
-        return <>
-        <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
-            <GiEarthCrack size={90} />
-            <p className="font-medium text-lg">Unable to load the page</p>
-            <p className="text-center text-sm">This is on us. Please be patient while we fix this.</p>
-        </main>
+            <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500 gap-3">
+                <SyncLoader
+                    color="#0f172b"
+                    size={5}
+                />
+                <p className="font-medium text-lg">Please wait</p>
+                <p className="text-center text-sm">Redirecting</p>
+            </main>
         </>
     }
 
-if(pageState === PageStateInitial){
+    function renderAccountNotFound() {
+        return <>
+            <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
+                <MdNoAccounts size={90} />
+                <p className="font-medium text-lg">Account Not Found!</p>
+                <p className="text-center text-sm">Please check with admin at your organization.</p>
+                <p className="text-center text-sm text-gray-400 font-semibold"><span className="font-normal">Logged in with </span>{fbUser?.email}</p>
+                <button onClick={() => {
+                    AuthUser.signOut()
+                }} className={"border-2 border-gray-200 px-5 py-2 mt-5 rounded-lg"}>Logout</button>
+            </main>
+        </>
+    }
+    function renderInvalidApiResult() {
+        return <>
+            <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
+                <GiEarthCrack size={90} />
+                <p className="font-medium text-lg">Unable to load the page</p>
+                <p className="text-center text-sm">This is on us. Please be patient while we fix this.</p>
+            </main>
+        </>
+    }
+
+    if (pageState === PageStateInitial) {
         return initialState()
-    } else if(pageState === PageStateAccountNotFound){
+    } else if (pageState === PageStateAccountNotFound) {
         return renderAccountNotFound()
-    } else if (pageState === PageStateInvalidApiResponse){
+    } else if (pageState === PageStateInvalidApiResponse) {
         return renderInvalidApiResult()
     }
     else {
         return <></>
     }
-    
+
 }
 

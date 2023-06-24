@@ -5,7 +5,7 @@ import { AxiosResponse } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { AuthUser, verifyIdToken } from "next-firebase-auth";
 
-initAuth()
+initAuth();
 export default async function getCompany(
   req: NextApiRequest,
   res: NextApiResponse
@@ -17,8 +17,13 @@ export default async function getCompany(
   if (!token) {
     return res.status(400).json({ error: "missing token" });
   }
+  let user;
   try {
-    const user = await verifyIdToken(token);
+    user = await verifyIdToken(token);
+  } catch (e) {
+    return res.status(401).json({ error: "token expired" });
+  }
+  try {
     const ud = await getDetails(user);
     return res.status(200).json(ud);
   } catch (e) {
@@ -30,7 +35,7 @@ export default async function getCompany(
 async function getDetails(user: AuthUser) {
   const company = user.email?.split("@")[1];
   try {
-    const res = await AxiosClient.post<any,AxiosResponse<CompanyResponse>>(
+    const res = await AxiosClient.post<any, AxiosResponse<CompanyResponse>>(
       "/get/company",
       JSON.stringify({
         filters: [
@@ -43,13 +48,13 @@ async function getDetails(user: AuthUser) {
         ],
       })
     );
-    if(!res || !res.data|| !res.data.company){
-        throw Error("Company response error")
+    if (!res || !res.data || !res.data.company) {
+      throw Error("Company response error");
     }
-    console.log(res.data)
-    const c = res.data.company[0]
-    console.log("company",c)
-    return c
+    console.log(res.data);
+    const c = res.data.company[0];
+    console.log("company", c);
+    return c;
   } catch (e) {
     throw e;
   }

@@ -1,3 +1,4 @@
+import Loader, { showError } from "@/components/Loader";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { AxiosClient, SelfAxiosClient } from "@/configs/axios";
 import { initAuth } from "@/initAuth";
@@ -18,12 +19,15 @@ function ViewFeedbacks() {
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
     const [unreadFeedback, setUnreadFeedback] = useState<Feedback[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const [loadingMessage,setLoadingMessage] = useState("")
     const index = 0
     useEffect(() => {
         getFeedbacks()
     }, [])
 
     function getFeedbacks() {
+        setLoadingMessage("Getting feedbacks for you.")
+        setIsLoading(true)
         SelfAxiosClient.get<any, AxiosResponse<FeedbackResponse>>("/get-feedback").then((res) => {
             const unread: Feedback[] = []
             const others: Feedback[] = []
@@ -37,10 +41,19 @@ function ViewFeedbacks() {
             setUnreadFeedback(unread)
             setFeedbacks(others)
             setIsLoading(false)
+        }).catch((e)=>{
+            if(e.response.status == 401){
+                setLoadingMessage("Token Expired")
+                setIsLoading(true)
+                user.signOut()
+                return
+            }
+            setIsLoading(false)
         })
     }
 
     function markAsConstructive() {
+        setLoadingMessage("Marking it as Constructive")
         setIsLoading(true)
         const f = unreadFeedback || []
         const cf = f[index]
@@ -50,11 +63,19 @@ function ViewFeedbacks() {
         }).then((res) => {
             getFeedbacks()
         }).catch((e) => {
-            alert("Could not update status")
+            if(e.response.status == 401){
+                setLoadingMessage("Token Expired")
+                setIsLoading(true)
+                user.signOut()
+                return
+            }
+            setIsLoading(false)
+            showError("Could not update status")
         })
 
     }
     function markAsNonConstructive() {
+        setLoadingMessage("Marking it as Non Constructive")
         setIsLoading(true)
         const f = unreadFeedback || []
         const cf = f[index]
@@ -64,7 +85,14 @@ function ViewFeedbacks() {
         }).then((res) => {
             getFeedbacks()
         }).catch((e) => {
-            alert("Could not update status")
+            if(e.response.status == 401){
+                setLoadingMessage("Token Expired")
+                setIsLoading(true)
+                user.signOut()
+                return
+            }
+            setIsLoading(false)
+            showError("Could not update status")
         })
     }
 
@@ -127,15 +155,17 @@ function ViewFeedbacks() {
 
 
     return (<>
+    {
+        isLoading?<Loader message={loadingMessage} />:<></>
+    }
         <ProtectedRoute>
             <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
                 <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
 
                     <Link href="/dashboard"><p className='font-bold  text-2xl'>happypeers.work</p></Link>
-                    <button onClick={user.signOut} className='border-2 border-gray-200 p-2 rounded-lg'>Logout</button>
                 </nav>
                 <section className="p-5">
-                    <p className="text-xl font-bold ml-5">Feedbacks for you</p>
+                    <p className="text-xl font-bold ml-5">Unread feedbacks for you</p>
                     {unreadFeedback.length == 0 ? renderEmptyState() : renderFeedback()}
                     <div className="text-center mt-10">
                         <p className="mt-10 text-gray-500 text-xs">Do you want to send feedback to some one?</p>

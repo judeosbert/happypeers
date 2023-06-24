@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import LoadingOverlay from 'react-loading-overlay';
 import { initAuth } from '@/initAuth'
 import Link from 'next/link'
+import { showError } from '@/components/Loader'
 
 
 
@@ -56,70 +57,10 @@ function Home() {
         throw Error("Unable to login in")
       }
 
-      // let companyResponse = (await AxiosClient.post<any, AxiosResponse<CompanyResponse>>("get/company", JSON.stringify({
-      //   "filters": [{
-      //     "column": "email_domain",
-      //     "filter": {
-      //       "text_equals": email.split("@")[1]
-      //     }
-      //   }]
-      // })))
-      // if (!companyResponse) {
-      //   alert("Error signing in")
-      //   return
-      // }
-      // if (companyResponse.data.company.length == 0) {
-      //   alert("Error signing in")
-      //   return
-      // }
-      // const company = companyResponse.data.company[0]
-      // if (!company) {
-      //   router.push("/setup")
-      //   return
-      // }
-      // if (company.activated !== "true") {
-      //   alert("Your plan for the company has expired. Please renew.")
-      //   return
-      // }
-
-      //   let userResponse = await AxiosClient.post<any, AxiosResponse<UserResponse>>("/get/Users", JSON.stringify({
-      //     "filters": [{
-      //       "column": "email",
-      //       filters: {
-      //         "text_equals": email
-      //       }
-      //     }]
-      //   }))
-      //   if (!userResponse || !userResponse.data || !userResponse.data.Users || userResponse.data.Users.length == 0) {
-      //     alert("Error logging in. ")
-      //     return
-      //   }
-      //   const user = userResponse.data.Users[0]
-      //   if (!user) {
-      //     alert("Could not find your profile. Contact admin")
-      //     return
-      //   }
-      //   if (user.activated !== "true") {
-      //     user.uid = firebaseAuth.currentUser?.uid ?? "null"
-      //     await AxiosClient.put("update/Users", JSON.stringify({
-      //       keys: {
-      //         "email": email
-      //       },
-      //       data: {
-      //         "activated": "true",
-      //         "uid": user.uid,
-      //         "name": firebaseAuth.currentUser?.displayName
-      //       }
-      //     }))
-      //     user.activated = "true"
-      //   }
-      //   logggedInUser = user
-      //   // router.push("/dashboard")
-
     } catch (e) {
       setIsLoading(false)
       console.log(e)
-      alert("Failed to login")
+      showError("Failed to login")
     }
   }
   return (

@@ -1,3 +1,4 @@
+import Loader, { showError, showSuccess } from "@/components/Loader";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { SelfAxiosClient } from "@/configs/axios";
 import User, { UserResponse } from "@/models/user";
@@ -11,45 +12,81 @@ export default withAuthUser({
     authPageURL:"/"
 })(ViewFeedbacks)
 function ViewFeedbacks() {
-    const user = useAuthUser()
+    const AuthUser = useAuthUser()
     const [peers, setPeers] = useState<User[]>([])
     const [appUser,setAppUser] = useState<User>()
     const [refresh,setRefresh] = useState(false)
+    const [isLoading,setIsLoading] = useState(false)
+    const [loadingMessage,setLoadingMessage] = useState("")
 
     useEffect(()=>{
+        setLoadingMessage("Hold your thought for a second")
+        setIsLoading(true)
         SelfAxiosClient.get<any,AxiosResponse<UserResponse>>("/get-user").then((userResponse)=>{
             if (!userResponse || !userResponse.data || !userResponse.data.Users || userResponse.data.Users.length == 0) {
-                alert("Error logging in. ")
+                if(userResponse.status == 401){
+                    setIsLoading(true)
+                    setLoadingMessage("Token Expired")
+                    AuthUser.signOut()
+                    return
+                }
+                setIsLoading(false)
+                showError("Error logging in. ")
                 return
             }
+            setIsLoading(false)
             const user = userResponse.data.Users[0]
             if (!user) {
-                alert("Could not find your profile. Contact admin")
+                showError("Could not find your profile. Contact admin")
                 return
             }
             setAppUser(user)
         }).catch((e)=>{
-            alert("Could not get user profile")
+            if(e.response.status == 401){
+                setIsLoading(true)
+                setLoadingMessage("Token Expired")
+                AuthUser.signOut()
+                return
+            }
+            setIsLoading(false)
+            showError("Could not get user profile")
             console.log(e)
         })
     },[refresh])
 
     useEffect(() => {
+        setLoadingMessage("Finding your peers")
+        setIsLoading(true)
         SelfAxiosClient.get<any, AxiosResponse<UserResponse>>("/get-company-peers").then((res) => {
             if (!res || !res.data || !res.data.Users) {
-                alert("Error")
+                if(res.status == 401){
+                    setIsLoading(true)
+                    setLoadingMessage("Token Expired")
+                    AuthUser.signOut()
+                    return
+                }
+                setIsLoading(false)
+                showError("Error finding your peers")
                 return
             }
+            setIsLoading(false)
             const p = res.data.Users
             const fp: User[] = []
             p.forEach((p) => {
-                if (p.uid != user.id) {
+                if (p.uid != AuthUser.id) {
                     fp.push(p)
                 }
             })
             setPeers(fp)
         }).catch((e) => {
-            alert(e)
+            if(e.response.status == 401){
+                setIsLoading(true)
+                setLoadingMessage("Token Expired")
+                AuthUser.signOut()
+                return
+            }
+            setIsLoading(false)
+            showError(e)
         })
     }, [])
 
@@ -71,30 +108,41 @@ function ViewFeedbacks() {
     function submitFeedback() {
         if(!appUser) return
         if (parseInt(appUser.balance) <= 0) {
-            alert("You don't have enough balance to submit reviews.")
+            showError("You don't have enough balance to submit reviews.")
             return
         }
-
-        if (selectedPeer?.uid.length == 0) {
-            alert("Select a peer to review")
+        if (!selectedPeer || selectedPeer?.uid.length == 0) {
+            showError("Select a peer to review")
             return
         }
 
         if (!feedback?.length) {
-            alert("Write a feedback to submit")
+            showError("Write a feedback to submit")
             return
         }
 
+        setLoadingMessage("Posting your feedback. Hold on!!")
+        setIsLoading(true)
         //TODO check if its constructive.
         SelfAxiosClient.post<any, AxiosResponse<any>>("/send-feedback", {
             recipient: selectedPeer?.uid,
             recipientName:selectedPeer?.name,
             feedback: feedback
         }).then((resp) => {
-            alert("Feedback submitted")
+            showSuccess("Your feedback is submitted!")
             setRefresh(true)
+            setIsLoading(false)
+            setFeedback("")
+
         }).catch((e) => {
-            alert("failed to submit review")
+            if(e.response.status == 401){
+                setIsLoading(true)
+                setLoadingMessage("Token Expired")
+                AuthUser.signOut()
+                return
+            }
+            setIsLoading(false)
+            showError(e.response.data.error??"failed to submit feedback")
         })
 
     }
@@ -102,18 +150,21 @@ function ViewFeedbacks() {
 
     return (
         <>
+            {
+                isLoading?<Loader message={loadingMessage} />:<></>
+            }
             <ProtectedRoute>
                 <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
                     <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
                        
                         <Link href={"/dashboard"}><p className='font-bold  text-2xl'>happypeers.work</p></Link>
-                        <button onClick={user.signOut} className='border-2 border-gray-200 p-2 rounded-lg'>Logout</button>
                     </nav>
                     <section className="p-5">
                         <p className="text-xl font-bold ml-5">Send your feedback</p>
+                        <p className="ml-5">Be constructive in your feedback to be accepted. </p>
                         <div className=" rounded-xl px-5 ">
-                            <p className="text-end">{appUser?.balance} feedbacks remaining</p>
                             <div className="mt-5 px-5 py-10 border rounded-lg bg-white flex flex-col gap-3">
+                                <p className="text-start">{appUser?.balance} feedbacks remaining</p>
                                 <select onChange={(e) => {
                                     setSelectedPeer({ uid: e.target.selectedOptions[0].value, name: e.target.selectedOptions[0].text })
                                 }} className=" rounded-lg border p-2 min-w-full" placeholder="Search for a collegue" value={selectedPeer?.uid} >
@@ -126,7 +177,6 @@ function ViewFeedbacks() {
                                 }} id="feedbackArea" className="rounded-lg border p-2" placeholder="Mark your feedback here. Rememeber it should be constructive">
                                     {feedback}
                                 </textarea>
-
                                 <button onClick={submitFeedback} className="bg-pbutton-500 text-white p-3 rounded-xl ">Submit feedback</button>
                             </div>
 

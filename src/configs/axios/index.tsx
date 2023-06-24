@@ -12,11 +12,7 @@ export const SelfAxiosClient = axios.create({
 AxiosClient.interceptors.response.use(
     (res) => res,
     (err) => {
-        // const statusCode = err?.response?.status;
-        // if (statusCode == 403 || statusCode == 401) {
-        //     window.location.pathname = '/';
-        // }
-        // throw err;
+
         console.log(err)
     }
 );
