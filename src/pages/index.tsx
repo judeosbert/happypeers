@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react'
 import LoadingOverlay from 'react-loading-overlay';
 import { initAuth } from '@/initAuth'
 import Link from 'next/link'
-import { showError } from '@/components/Loader'
+import Loader, { showError } from '@/components/Loader'
 
 
 
@@ -45,27 +45,25 @@ export default withAuthUser({
 function Home() {
   const fbUser = useAuthUser()
   const [isLoading, setIsLoading] = useState(false)
-  const [loaderText, setLoaderText] = useState("")
   async function signIn() {
     try {
-      setLoaderText("Logging In")
       setIsLoading(true)
-      await signinWithGoogle()  
+      await signinWithGoogle()
       let email = firebaseAuth.currentUser?.email
       if (!email) {
         setIsLoading(false)
         throw Error("Unable to login in")
       }
-
     } catch (e) {
       setIsLoading(false)
-      console.log(e)
       showError("Failed to login")
     }
   }
   return (
     <>
-    <LoadingOverlay active={isLoading} spinner text={loaderText}></LoadingOverlay>
+      {
+        isLoading ? <Loader message="Signing In" /> : <></>
+      }
       <AppDataContextProvider>
         <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
           <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
@@ -174,7 +172,7 @@ function Home() {
           </div>
         </main>
       </AppDataContextProvider>
-      
+
     </>
   )
 }

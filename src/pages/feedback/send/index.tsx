@@ -4,27 +4,29 @@ import { SelfAxiosClient } from "@/configs/axios";
 import User, { UserResponse } from "@/models/user";
 import { MenuOutlined } from "@ant-design/icons";
 import { AxiosResponse } from "axios";
+import { debug } from "console";
 import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 export default withAuthUser({
-    whenUnauthedAfterInit:AuthAction.REDIRECT_TO_LOGIN,
-    authPageURL:"/"
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    authPageURL: "/"
 })(ViewFeedbacks)
 function ViewFeedbacks() {
     const AuthUser = useAuthUser()
     const [peers, setPeers] = useState<User[]>([])
-    const [appUser,setAppUser] = useState<User>()
-    const [refresh,setRefresh] = useState(false)
-    const [isLoading,setIsLoading] = useState(false)
-    const [loadingMessage,setLoadingMessage] = useState("")
+    const [appUser, setAppUser] = useState<User>()
+    const [refresh, setRefresh] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [loadingMessage, setLoadingMessage] = useState("")
+    const [analysis, setAnalysis] = useState<AnalysisResponse>()
 
-    useEffect(()=>{
+    useEffect(() => {
         setLoadingMessage("Hold your thought for a second")
         setIsLoading(true)
-        SelfAxiosClient.get<any,AxiosResponse<UserResponse>>("/get-user").then((userResponse)=>{
+        SelfAxiosClient.get<any, AxiosResponse<UserResponse>>("/get-user").then((userResponse) => {
             if (!userResponse || !userResponse.data || !userResponse.data.Users || userResponse.data.Users.length == 0) {
-                if(userResponse.status == 401){
+                if (userResponse.status == 401) {
                     setIsLoading(true)
                     setLoadingMessage("Token Expired")
                     AuthUser.signOut()
@@ -41,8 +43,8 @@ function ViewFeedbacks() {
                 return
             }
             setAppUser(user)
-        }).catch((e)=>{
-            if(e.response.status == 401){
+        }).catch((e) => {
+            if (e.response.status == 401) {
                 setIsLoading(true)
                 setLoadingMessage("Token Expired")
                 AuthUser.signOut()
@@ -52,14 +54,14 @@ function ViewFeedbacks() {
             showError("Could not get user profile")
             console.log(e)
         })
-    },[refresh])
+    }, [refresh])
 
     useEffect(() => {
         setLoadingMessage("Finding your peers")
         setIsLoading(true)
         SelfAxiosClient.get<any, AxiosResponse<UserResponse>>("/get-company-peers").then((res) => {
             if (!res || !res.data || !res.data.Users) {
-                if(res.status == 401){
+                if (res.status == 401) {
                     setIsLoading(true)
                     setLoadingMessage("Token Expired")
                     AuthUser.signOut()
@@ -79,7 +81,7 @@ function ViewFeedbacks() {
             })
             setPeers(fp)
         }).catch((e) => {
-            if(e.response.status == 401){
+            if (e.response.status == 401) {
                 setIsLoading(true)
                 setLoadingMessage("Token Expired")
                 AuthUser.signOut()
@@ -106,7 +108,7 @@ function ViewFeedbacks() {
     }
     const [selectedPeer, setSelectedPeer] = useState<SelectedPeer>()
     function submitFeedback() {
-        if(!appUser) return
+        if (!appUser) return
         if (parseInt(appUser.balance) <= 0) {
             showError("You don't have enough balance to submit reviews.")
             return
@@ -126,7 +128,7 @@ function ViewFeedbacks() {
         //TODO check if its constructive.
         SelfAxiosClient.post<any, AxiosResponse<any>>("/send-feedback", {
             recipient: selectedPeer?.uid,
-            recipientName:selectedPeer?.name,
+            recipientName: selectedPeer?.name,
             feedback: feedback
         }).then((resp) => {
             showSuccess("Your feedback is submitted!")
@@ -135,28 +137,60 @@ function ViewFeedbacks() {
             setFeedback("")
 
         }).catch((e) => {
-            if(e.response.status == 401){
+            if (e.response.status == 401) {
                 setIsLoading(true)
                 setLoadingMessage("Token Expired")
                 AuthUser.signOut()
                 return
             }
             setIsLoading(false)
-            showError(e.response.data.error??"failed to submit feedback")
+            showError(e.response.data.error ?? "failed to submit feedback")
         })
 
+    }
+
+
+    interface AnalysisResponse {
+        analysis: string,
+        score: number,
+    }
+    const errorAnalysis = {
+        analysis: "Could not analyse your feedback. Change something to try again",
+        score: -1
+    }
+    function getAnalysis(feedback: string) {
+        if (!feedback || feedback.trim().length == 0) {
+            
+            setAnalysis(undefined)
+            return
+        }
+        SelfAxiosClient.post<any, AxiosResponse<AnalysisResponse>>("/get-analysis-score",{
+            feedback:feedback
+        }).then((resp) => {
+            
+            setAnalysis(resp.data)
+        }).catch((e) => {
+            
+            if (e.response.status == 401) {
+                setIsLoading(true)
+                setLoadingMessage("Token Expired")
+                AuthUser.signOut()
+                return
+            }
+            setAnalysis(errorAnalysis)
+        })
     }
 
 
     return (
         <>
             {
-                isLoading?<Loader message={loadingMessage} />:<></>
+                isLoading ? <Loader message={loadingMessage} /> : <></>
             }
             <ProtectedRoute>
                 <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
                     <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
-                       
+
                         <Link href={"/dashboard"}><p className='font-bold  text-2xl'>happypeers.work</p></Link>
                     </nav>
                     <section className="p-5">
@@ -174,9 +208,17 @@ function ViewFeedbacks() {
                                 </select>
                                 <textarea onChange={(e) => {
                                     setFeedback(e.target.value)
+                                    
+                                    getAnalysis(e.target.value)
                                 }} id="feedbackArea" className="rounded-lg border p-2" placeholder="Mark your feedback here. Rememeber it should be constructive">
                                     {feedback}
                                 </textarea>
+                                {
+                                    analysis ? <p className={analysis!!.score > 0 ? "text-green-600 text-sm" : analysis!!.score < 0 ? "text-red-600" : "text-yellow-500"}>
+                                        {analysis?.analysis}
+                                    </p> : <></>
+                                }
+
                                 <button onClick={submitFeedback} className="bg-pbutton-500 text-white p-3 rounded-xl ">Submit feedback</button>
                             </div>
 
