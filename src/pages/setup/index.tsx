@@ -50,12 +50,15 @@ function Setup() {
         setLoaderMessage("Setting up the company profile")
         setIsLoading(true)
         if (employees == "") {
+            setIsLoading(false)
             showError("Add few employees to continue.")
             return
         }
         let emps = employees.split("\n")
         if (emps.length == 0) {
+            setIsLoading(false)
             showError("Add few employees to continue.")
+            
             return
         }
         SelfAxiosClient.post("/create-company", {
@@ -88,7 +91,7 @@ function Setup() {
         })
         if (emps.length == 0) {
             showError("Add few employees to continue.")
-            setIsLoading(true)
+            setIsLoading(false)
             return
         }
         SelfAxiosClient.post("/add-employees", {
