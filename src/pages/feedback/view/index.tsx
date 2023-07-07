@@ -1,18 +1,17 @@
 import Loader, { showError } from "@/components/Loader";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { AxiosClient, SelfAxiosClient } from "@/configs/axios";
+import { SelfAxiosClient } from "@/configs/axios";
 import { initAuth } from "@/initAuth";
 import Feedback, { FeedbackResponse } from "@/models/feedback";
 import { AxiosResponse } from "axios";
+import TimeAgo from 'javascript-time-ago';
 import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import TimeAgo from 'javascript-time-ago'
 
-import en from 'javascript-time-ago/locale/en.json'
-import ru from 'javascript-time-ago/locale/ru.json'
+import en from 'javascript-time-ago/locale/en.json';
+import ru from 'javascript-time-ago/locale/ru.json';
 import ReactTimeAgo from "react-time-ago";
-import { locale } from "moment";
 
 
 
