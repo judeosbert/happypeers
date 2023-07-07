@@ -188,7 +188,7 @@ function ViewFeedbacks() {
                 isLoading ? <Loader message={loadingMessage} /> : <></>
             }
             <ProtectedRoute>
-                <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
+                <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-inter">
                     <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
 
                         <Link href={"/dashboard"}><p className='font-bold  text-2xl'>happypeers.work</p></Link>

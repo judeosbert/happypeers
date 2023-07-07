@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
     return <>
-        <main className="bg-grey-500 font-poppins">
+        <main className="bg-grey-500 font-inter">
             <nav className="bg-white flex  items-center p-4 gap-3 justify-between">
                 <p className="font-bold  text-2xl">happypeers.work</p>
             </nav>

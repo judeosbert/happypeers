@@ -15,6 +15,13 @@ import { UserResponse } from "@/models/user";
 import { initAuth } from "@/initAuth";
 import { useRouter } from "next/router";
 import Loader, { showError } from "@/components/Loader";
+import ReactTimeAgo from "react-time-ago";
+import { locale } from "moment";
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en.json'
+import ru from 'javascript-time-ago/locale/ru.json'
+
 
 initAuth()
 
@@ -23,15 +30,17 @@ export default withAuthUser({
     authPageURL: "/"
 })(Dashboard)
 function Dashboard() {
+    TimeAgo.addDefaultLocale(en)
+    TimeAgo.addLocale(ru)
     const router = useRouter()
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
     const [activity, setActivities] = useState<Activity[]>([])
-    const [isAdmin,setIsAdmin] = useState<boolean>(false)
-    const [balance,setBalance] = useState(0)
-    const [isLoading,setIsLoading] = useState(false)
-    const [loadingMessage,setLoadingMessage] = useState("")
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const [balance, setBalance] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
+    const [loadingMessage, setLoadingMessage] = useState("")
     const AuthUser = useAuthUser()
-    
+
     useEffect(() => {
         if (!AuthUser) return
         getFeedbacksForUser()
@@ -42,23 +51,23 @@ function Dashboard() {
         getActivities()
     }, [AuthUser])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!AuthUser) return
         getUserBalance()
-    },[AuthUser])
+    }, [AuthUser])
 
-    useEffect(()=>{
+    useEffect(() => {
         setIsAdmin(localStorage.getItem("is_admin") === "true")
-    },[])
+    }, [])
 
-    async function getUserBalance(){
-        if(!AuthUser.id) return
+    async function getUserBalance() {
+        if (!AuthUser.id) return
         setLoadingMessage("Preparing your dashboard")
         setIsLoading(true)
         const userResponse = await SelfAxiosClient.get("/get-user")
         setIsLoading(false)
         if (!userResponse || !userResponse.data || !userResponse.data.Users || userResponse.data.Users.length == 0) {
-            if(userResponse.status == 401){
+            if (userResponse.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 AuthUser.signOut()
@@ -78,13 +87,13 @@ function Dashboard() {
 
 
     async function getFeedbacksForUser() {
-        if(!AuthUser.id) return
+        if (!AuthUser.id) return
         setLoadingMessage("Preparing your dashboard")
         setIsLoading(true)
         const feedbackResponse = await SelfAxiosClient.get<any, AxiosResponse<FeedbackResponse>>("/get-feedback")
         setIsLoading(false)
         if (!feedbackResponse || !feedbackResponse.data.feedback) {
-            if(feedbackResponse.status == 401){
+            if (feedbackResponse.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 AuthUser.signOut()
@@ -97,7 +106,7 @@ function Dashboard() {
     }
 
     function getUnreadCount(): string {
-        
+
         let count = 0
         feedbacks.forEach((f) => {
             if (f.status == "unread") {
@@ -108,7 +117,7 @@ function Dashboard() {
     }
 
     async function getActivities() {
-        if(!AuthUser) return
+        if (!AuthUser) return
         setLoadingMessage("Preparing your dashboard")
         setIsLoading(true)
         SelfAxiosClient.get<any, AxiosResponse<ActivityResponse>>("/get-company-activities").then((res) => {
@@ -119,14 +128,14 @@ function Dashboard() {
             }
             const a = res.data.activity
             setActivities(a.reverse())
-        }).catch((e)=>{
-            if(e.response.status == 401){
+        }).catch((e) => {
+            if (e.response.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 AuthUser.signOut()
             }
             setIsLoading(false)
-            
+
         })
     }
     function renderEmptyState() {
@@ -138,6 +147,7 @@ function Dashboard() {
             </div>
         </>
     }
+
     function renderActivities() {
         const divs: JSX.Element[] = []
         activity.map((a: Activity) => {
@@ -145,7 +155,9 @@ function Dashboard() {
                 <div key={a.id} className="bg-white min-w-full p-5 rounded-xl">
                     <div className="px-5 py-3 border rounded-lg">
                         <p>{a.activity}</p>
-                        <p className="text-end text-gray-500 text-sm">{a.created_at}</p>
+                        <p className="text-end text-gray-500 text-sm">
+                            <ReactTimeAgo date={Date.parse(a.created_at)} locale="en-US" />
+                        </p>
                     </div>
                 </div>
             </>)
@@ -154,29 +166,29 @@ function Dashboard() {
     }
     return (
         <>
-        {
-            isLoading?<Loader message={loadingMessage} />:<></>
-        }
+            {
+                isLoading ? <Loader message={loadingMessage} /> : <></>
+            }
             <ProtectedRoute>
                 <AppDataContextProvider>
-                    <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
+                    <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-inter">
                         <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
-                           
+
                             <p className='font-bold  text-2xl'>happypeers.work</p>
                             <div className="flex flex-row gap-2">
-                                {isAdmin?<button
-                                onClick={()=>{
-                                    setLoadingMessage("Please wait")
+                                {isAdmin ? <button
+                                    onClick={() => {
+                                        setLoadingMessage("Please wait")
+                                        setIsLoading(true)
+                                        router.push("/setup")
+                                        // setIsLoading(fals)
+                                    }}
+                                    className="p-2 rounded-md bg-pbutton-500 text-white text-sm">Edit Company Details</button> : <></>}
+                                <button onClick={() => {
+                                    setLoadingMessage("Signing Out")
                                     setIsLoading(true)
-                                    router.push("/setup")
-                                    // setIsLoading(fals)
-                                }}
-                                className="p-2 rounded-md bg-pbutton-500 text-white text-sm">Edit Company Details</button>:<></>}
-                            <button onClick={()=>{
-                                setLoadingMessage("Signing Out")
-                                setIsLoading(true)
-                                AuthUser.signOut()
-                            }} className='border-2 border-gray-200 p-2 rounded-lg'>Logout</button>
+                                    AuthUser.signOut()
+                                }} className='border-2 border-gray-200 p-2 rounded-lg'>Logout</button>
                             </div>
                         </nav>
                         <section className="p-5">
@@ -198,7 +210,7 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="mt-5 flex flex-col gap-4">
-                                <p className="text-lg font-bold">Recent Activites at Greedygame</p>
+                                <p className="text-lg font-bold">Recent activites in your space</p>
                                 {activity.length == 0 ? renderEmptyState() : renderActivities()}
                             </div>
                             <p className="text-center text-gray-500 text-sm mt-5"> You have reached the end!!</p>

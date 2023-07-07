@@ -113,7 +113,7 @@ function Setup() {
         <>
             {isLoading ? <Loader message={loaderMessage} /> : <></>}
             <ProtectedRoute>
-                <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
+                <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-inter">
                     <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
 
                         <p className='font-bold  text-2xl'>happypeers.work</p>
@@ -154,7 +154,7 @@ function Setup() {
                             </div>
                             <div>
                                 <p className="">Plan <span className="text-sm text-gray-500">(free during beta)</span></p>
-                                <input disabled readOnly className="border min-w-full py-2 px-5 bg-white rounded-lg" value={"SUPREME"}></input>
+                                <input disabled readOnly className="border min-w-full py-2 px-5 bg-white rounded-lg" value={"FREE"}></input>
                             </div>
 
                             <button onClick={company ? updateCompany : createCompany} className="bg-pbutton-500 text-white rounded-lg py-3">{company ? "Add New Employees" : "Create Company Profile"}</button>

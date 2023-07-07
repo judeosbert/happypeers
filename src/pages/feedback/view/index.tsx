@@ -6,7 +6,15 @@ import Feedback, { FeedbackResponse } from "@/models/feedback";
 import { AxiosResponse } from "axios";
 import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
 import Link from "next/link";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en.json'
+import ru from 'javascript-time-ago/locale/ru.json'
+import ReactTimeAgo from "react-time-ago";
+import { locale } from "moment";
+
+
 
 initAuth()
 
@@ -15,11 +23,13 @@ export default withAuthUser({
     authPageURL: "/"
 })(ViewFeedbacks)
 function ViewFeedbacks() {
+    TimeAgo.addDefaultLocale(en)
+    TimeAgo.addLocale(ru)
     const user = useAuthUser()
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
     const [unreadFeedback, setUnreadFeedback] = useState<Feedback[]>([])
     const [isLoading, setIsLoading] = useState(false)
-    const [loadingMessage,setLoadingMessage] = useState("")
+    const [loadingMessage, setLoadingMessage] = useState("")
     const index = 0
     useEffect(() => {
         getFeedbacks()
@@ -41,8 +51,8 @@ function ViewFeedbacks() {
             setUnreadFeedback(unread)
             setFeedbacks(others)
             setIsLoading(false)
-        }).catch((e)=>{
-            if(e.response.status == 401){
+        }).catch((e) => {
+            if (e.response.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 user.signOut()
@@ -63,7 +73,7 @@ function ViewFeedbacks() {
         }).then((res) => {
             getFeedbacks()
         }).catch((e) => {
-            if(e.response.status == 401){
+            if (e.response.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 user.signOut()
@@ -85,7 +95,7 @@ function ViewFeedbacks() {
         }).then((res) => {
             getFeedbacks()
         }).catch((e) => {
-            if(e.response.status == 401){
+            if (e.response.status == 401) {
                 setLoadingMessage("Token Expired")
                 setIsLoading(true)
                 user.signOut()
@@ -124,12 +134,12 @@ function ViewFeedbacks() {
             return <button disabled className="disabled:opacity-60 flex-1 text-green-600 border border-green-600 py-4 rounded-lg">You marked this as Constructive</button>
         }
 
-        const of:JSX.Element[] = []
+        const of: JSX.Element[] = []
         feedbacks.forEach((f) => {
             of.push(<>
                 <div className="mt-5 px-5 py-10 border rounded-lg bg-white">
                     <p className="text-2xl">{f?.feedback}</p>
-                    <p className="text-end text-gray-500 text-sm">Sent on {f?.created_at}</p>
+                    <p className="text-end text-gray-500 text-sm"><span>Sent </span><span><ReactTimeAgo date={Date.parse(f.created_at)}  locale={"en-US"} /></span></p>
                     <div className="flex flex-row gap-2 mt-10">
                         {f.status == "constructive" ? renderConstructiveIndicator() : renderNonConstructiveIndicator()}
                     </div>
@@ -155,11 +165,11 @@ function ViewFeedbacks() {
 
 
     return (<>
-    {
-        isLoading?<Loader message={loadingMessage} />:<></>
-    }
+        {
+            isLoading ? <Loader message={loadingMessage} /> : <></>
+        }
         <ProtectedRoute>
-            <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-poppins">
+            <main className="min-h-screen min-w-full bg-grey-500 text-primary-500 font-inter">
                 <nav className='bg-white flex  items-center p-4 gap-3 justify-between'>
 
                     <Link href="/dashboard"><p className='font-bold  text-2xl'>happypeers.work</p></Link>
