@@ -1,26 +1,20 @@
-import { AxiosClient, SelfAxiosClient } from "@/configs/axios";
-import { firebaseAuth } from "@/configs/firebase";
-import { AppDataContextProvider, useAppDataContext } from "@/context";
-import Feedback, { FeedbackResponse } from "@/models/feedback";
-import { MenuOutlined } from "@ant-design/icons";
-import { AxiosResponse } from "axios";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { createStore } from "state-pool";
-import { logggedInUser } from "..";
-import Activity, { ActivityResponse } from "@/models/activity";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { AuthAction, AuthUser, useAuthUser, withAuthUser } from "next-firebase-auth";
-import { UserResponse } from "@/models/user";
-import { initAuth } from "@/initAuth";
-import { useRouter } from "next/router";
 import Loader, { showError } from "@/components/Loader";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { SelfAxiosClient } from "@/configs/axios";
+import { AppDataContextProvider } from "@/context";
+import { initAuth } from "@/initAuth";
+import Activity, { ActivityResponse } from "@/models/activity";
+import Feedback, { FeedbackResponse } from "@/models/feedback";
+import { AxiosResponse } from "axios";
+import TimeAgo from 'javascript-time-ago';
+import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ReactTimeAgo from "react-time-ago";
-import { locale } from "moment";
-import TimeAgo from 'javascript-time-ago'
 
-import en from 'javascript-time-ago/locale/en.json'
-import ru from 'javascript-time-ago/locale/ru.json'
+import en from 'javascript-time-ago/locale/en.json';
+import ru from 'javascript-time-ago/locale/ru.json';
 
 
 initAuth()
