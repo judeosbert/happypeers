@@ -119,9 +119,16 @@ function Setup() {
             setIsLoading(false)
             return
         }
-
         let emps = Array.from(new Set(e))
-        debugger
+        let existingEmails = existingEmployees.map((v) => {
+            return v.email
+        })
+        emps = emps.filter(val => !existingEmails.includes(val))
+        if (emps.length == 0) {
+            showError("Add few employees to continue.")
+            setIsLoading(false)
+            return
+        }
         SelfAxiosClient.post("/add-employees", {
             name: company?.name,
             employees: emps
