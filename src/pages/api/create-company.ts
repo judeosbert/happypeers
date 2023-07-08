@@ -59,7 +59,7 @@ async function createCompany(authUser: AuthUser, req: CreateCompanyReq) {
           email: authUser.email,
           created_at: Date(),
           balance: 2,
-          activated: true,
+          activated: "TRUE",
         },
       })
     );
