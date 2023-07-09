@@ -64,6 +64,7 @@ function Home() {
           </nav>
           <section className='px-5 text-center mt-20'>
             <div className='mt-20 flex flex-col gap-2 items-center justify-center text-center px-2'>
+              <a href="https://www.producthunt.com/posts/happypeers?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-happypeers" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=403646&theme=light" alt="HappyPeers - Anonymous&#0032;peer&#0032;feedback&#0032;to&#0032;improve&#0032;your&#0032;workspace | Product Hunt" width={250} height={54}/></a>
               <h1 className='text-5xl font-bold '>Innovative Employee Feedback System</h1>
               <p className='text-xl font-light leading-7 text-gray-700 mt-4'>Boost your employee  by addressing internal issues faster</p>
             </div>
