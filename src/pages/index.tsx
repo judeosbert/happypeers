@@ -187,10 +187,16 @@ function Home() {
 
 
           </section>
-          <div className='bg-pbutton-500 px-10 pt-10 mt-10 text-white pb-10 flex flex-row justify-between'>
-            <div>
+          <div className='bg-pbutton-500 px-10 pt-10 mt-10 text-white pb-10 flex flex-row justify-between gap-5'>
+            
+            <div className='flex flex-col font-light'>
+              <h2 className='text-l font-bold'>Contact</h2>
+              <Link className='text-xl' href='mailto:hello@happypeers.work'>hello@happypeers.work</Link>
+            </div>
+
+            <div className='md:block hidden'>
               <p className='font-light'>Powered by</p>
-              <a href="#"><p className='text-xl md:text-5xl font-bold'>onsheets.io</p></a>
+              <a href="#"><p className='text-xl md:text-2xl font-bold'>onsheets.io</p></a>
             </div>
             <div className='flex flex-col font-light'>
               <h2 className='text-l font-bold'>Boring</h2>
