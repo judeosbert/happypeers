@@ -1,4 +1,4 @@
-import { AxiosClient } from "@/configs/axios";
+import { AxiosClient, SelfAxiosClient } from "@/configs/axios";
 import { firebaseAuth, TOKEN_KEY } from "@/configs/firebase";
 import { initAuth } from "@/initAuth";
 import { CompanyResponse } from "@/models/company";
@@ -7,9 +7,10 @@ import { AxiosResponse } from "axios";
 import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { MdNoAccounts } from "react-icons/md"
+import { MdEmail, MdNoAccounts } from "react-icons/md"
 import { GiEarthCrack } from "react-icons/gi"
 import { SyncLoader } from "react-spinners";
+import { showError } from "@/components/Loader";
 
 initAuth()
 
@@ -21,6 +22,7 @@ export default withAuthUser({
 const PageStateInitial = "initial"
 const PageStateAccountNotFound = "account_not_found"
 const PageStateInvalidApiResponse = "invalid_api_response"
+const PagePublicEmailDomain = "public_email_domain"
 function AuthRedirect() {
     //check if the user is already setup
     //if setup,  send to dashboard
@@ -39,11 +41,25 @@ function AuthRedirect() {
                     return
                 }
                 localStorage.setItem(TOKEN_KEY, res)
-                getCompanyDetails().then(() => {
-                    getUserDetails()
-                }).catch((e) => {
-                    console.log("redirect", e)
+                isPublicDomainEmail().then((domainCheckStatus) => {
+                    if (domainCheckStatus == 401) {
+                        AuthUser.signOut()
+                        return
+                    }
+
+                    if (domainCheckStatus == 220) {
+                        setPageState(PagePublicEmailDomain)
+                        return
+                    }
+
+                    getCompanyDetails().then(() => {
+                        getUserDetails()
+                    }).catch((e) => {
+                        console.log("redirect", e)
+                    })
                 })
+
+
             }).catch((e) => {
                 console.log("redirect-token", e)
             })
@@ -52,6 +68,13 @@ function AuthRedirect() {
         }
 
     }, [])
+
+
+    async function isPublicDomainEmail() {
+        let res = await SelfAxiosClient.get<any, AxiosResponse<any>>("/check-public-emails")
+        return res.status
+
+    }
 
     async function getUserDetails() {
         const email = fbUser?.email
@@ -151,16 +174,33 @@ function AuthRedirect() {
         </>
     }
 
+    function renderPublicEmailDomain() {
+        return <>
+            <main className="bg-white min-h-screen min-w-full flex flex-col justify-center items-center text-primary-500">
+                <MdEmail size={90} />
+                <p className="font-medium text-lg">Log in with your work email!</p>
+                <p className="text-center text-sm">You need to login with a work email to use happypeers.</p>
+                <p className="text-center text-sm text-gray-400 font-semibold"><span className="font-normal">Logged in with </span>{fbUser?.email}</p>
+                <button onClick={() => {
+                    AuthUser.signOut()
+                }} className={"border-2 border-gray-200 px-5 py-2 mt-5 rounded-lg"}>Logout</button>
+            </main>
+        </>
+    }
+
     if (pageState === PageStateInitial) {
         return initialState()
     } else if (pageState === PageStateAccountNotFound) {
         return renderAccountNotFound()
     } else if (pageState === PageStateInvalidApiResponse) {
         return renderInvalidApiResult()
+    } else if (pageState == PagePublicEmailDomain) {
+        return renderPublicEmailDomain()
     }
     else {
         return <></>
     }
+    
 
 }
 
