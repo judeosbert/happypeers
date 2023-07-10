@@ -1656,11 +1656,6 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-clarity-js@^0.7.8:
-  version "0.7.8"
-  resolved "https://registry.yarnpkg.com/clarity-js/-/clarity-js-0.7.8.tgz#6b421522a6feee0ee410b8c2dc2ebe271a965388"
-  integrity sha512-iNYpEQzLTZU0QtO2fBtH9QhBzvLKXAhUH12gsMjhA6k/a1kVsqZ1HKfMh5eWfHywKwPfVWdxsCF0t5dET9sbWQ==
-
 classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
