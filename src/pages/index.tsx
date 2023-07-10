@@ -152,11 +152,11 @@ function Home() {
 
               </div>
             </div>
-            <div id="pricing-section" className='mt-20 flex flex-col items-center justify-center max-w-screen-md md:max-w-screen-xl'>
+            <div id="pricing-section" className='mt-20 flex flex-col items-center justify-center'>
               <h1 className='text-4xl font-bold '>Pricing</h1>
               <p className='mt-7'><span className='text-primary-500 text-2xl font-bold'>FREE</span></p>
               <p className='font-light text-sm'>Early-Bird Offer</p>
-              <div className='rounded-xl mt-5  shadow bg-white p-5 border border-gray-200 flex flex-col text-start md:text-center lg:text-center  max-w-screen-xl'>
+              <div className='rounded-xl mt-5  shadow bg-white p-5 border border-gray-200 flex flex-col text-start md:text-center lg:text-center max-w-screen-md md:max-w-screen-xl'>
                 <div className='mt-5 text-start '></div>
                 <div className='flex flex-col items-start font-light text-xl gap-y-5 '>
                   <div className='flex flex-row'>
