@@ -81,16 +81,16 @@ function Home() {
               <p className='font-thin px-5'><span className='font-semibold'>Isn't your feedback sessions with the team bringing out issues?</span> Happy Peers is for you.</p>
             </div> */}
             <div className='flex flex-row justify-center'>
-              <img className='mt-6  max-w-full md:max-w-screen-xl' src="../console_preview.png" />
+              <img alt='a preview of the dashboard of Happy Peers for employee management system' className='mt-6  max-w-full md:max-w-screen-xl' src="../console_preview.png" />
             </div>
             <div className='mt-12 flex flex-col gap-4 items-center'>
-              <h1 className='text font-light'> Know internal issues before it is posted online</h1>
-              <h1 className='text-4xl font-bold'>Anonymous feedbacks for atmost honesty</h1>
+              <h3 className='text font-light'> Know internal issues before it is posted online</h3>
+              <h2 className='text-4xl font-bold'>Anonymous feedbacks for atmost honesty</h2>
               <p className='text-lg font-light px-6 max-w-screen-sm'>HappyPeers is an innovative feedback system for your organisation that encourages people to speak up by maintaining anonymity, identify points of improvement for individuals and organisation for a happier workspace</p>
               <div className='grid grid-flow-row gap-y-16 px-5 md:px-10 lg:px-20 md:pb-16 mt-20 lg:mt-20'>
                 <div className='grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-3 md:gap-10'>
                   <div className='block md:hidden'>
-                    <img src='../complete_anonymity.png' />
+                    <img alt='HappyPeers promises complete anonimity to all of its users' src='../complete_anonymity.png' />
                   </div>
 
                   <div className='flex flex-col items-start gap-4 text-start justify-center'>
@@ -102,58 +102,58 @@ function Home() {
                   </div>
 
                   <div className='md:block hidden'>
-                    <img src='../complete_anonymity.png' />
+                    <img alt='HappyPeers promises complete anonimity to all of its users' src='../complete_anonymity.png' />
                   </div>
 
                 </div>
 
                 <div className='grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-3 md:gap-10'>
                   <div>
-                    <img className='max-w-full' src='../only_constructive.png' />
+                    <img alt='Users can only submit constructive feedbacks. This is ensured by our Nice Talk Engine, Powered by AI' className='max-w-full' src='../only_constructive.png' />
                   </div>
                   <div className='flex flex-col items-start gap-4 text-start justify-center'>
                     <div className='border-2 p-2 rounded-xl'>
                       <GiPlantWatering className='text-4xl flex-1' />
                     </div>
-                    <h1 className='text-2xl'>Only Constructive Feedbacks</h1>
-                    <p className='font-light text-lg'>All feedbacks submitted are ensured to be constructive using our NiceTalk engine.</p>
+                    <h2 className='text-2xl'>Only Constructive Feedbacks</h2>
+                    <h3 className='font-light text-lg'>All feedbacks submitted are ensured to be constructive using our NiceTalk engine.</h3>
                   </div>
                 </div>
 
                 <div className='grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-3 md:gap-10'>
                   <div className='flex flex-col items-start gap-4 text-start justify-center'>
                     <div className='block md:hidden'>
-                      <img className='max-w-full' src='../point_based_review_system.png' />
+                      <img alt='Feedbacks can only be submitted by consuming a point.' className='max-w-full' src='../point_based_review_system.png' />
                     </div>
 
                     <div className='border-2 p-2 rounded-xl'>
                       <FaPeopleArrows className='text-4xl flex-1' />
                     </div>
-                    <h1 className='text-2xl'>Point Based Peer Review System</h1>
-                    <p className='font-light text-lg'>Every employee can submit 2 reviews monthly. If the previous comments are marked as constructive, their point is credited back to contribute more.</p>
+                    <h2 className='text-2xl'>Point Based Peer Review System</h2>
+                    <h3 className='font-light text-lg'>Every employee can submit 2 reviews monthly. If the previous comments are marked as constructive, their point is credited back to contribute more.</h3>
                   </div>
                   <div className='hidden md:block'>
-                    <img className='max-w-full' src='../point_based_review_system.png' />
+                    <img alt='Feedbacks can only be submitted by consuming a point.' className='max-w-full' src='../point_based_review_system.png' />
                   </div>
                 </div>
 
                 <div className='grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-3 md:gap-10'>
                   <div>
-                    <img className='max-w-full' src='../private_feedbacks.png' />
+                    <img alt='Feedbacks are available inside your organisation. Nothing goes out. ' className='max-w-full' src='../private_feedbacks.png' />
                   </div>
                   <div className='flex flex-col items-start gap-4 text-start justify-center'>
                     <div className='border-2 p-2 rounded-xl'>
                       <BsFillBuildingFill className='text-4xl flex-1' />
                     </div>
-                    <h1 className='text-2xl'>Feedbacks never leave your organization</h1>
-                    <p className='font-light text-lg'>Every feedback submitted within your organization is never shared publically. They are right in your inbox for you to take the right actions.</p>
+                    <h2 className='text-2xl'>Feedbacks never leave your organization</h2>
+                    <h3 className='font-light text-lg'>Every feedback submitted within your organization is never shared publically. They are right in your inbox for you to take the right actions.</h3>
                   </div>
                 </div>
 
               </div>
             </div>
             <div id="pricing-section" className='mt-20 flex flex-col items-center justify-center'>
-              <h1 className='text-4xl font-bold '>Pricing</h1>
+              <h2 className='text-4xl font-bold '>Pricing</h2>
               <p className='mt-7'><span className='text-primary-500 text-2xl font-bold'>FREE</span></p>
               <p className='font-light text-sm'>Early-Bird Offer</p>
               <div className='rounded-xl mt-5  shadow bg-white p-5 border border-gray-200 flex flex-col text-start md:text-center lg:text-center max-w-screen-md md:max-w-screen-xl'>
@@ -190,7 +190,7 @@ function Home() {
           <div className='bg-pbutton-500 px-10 pt-10 mt-10 text-white pb-10 flex flex-row justify-between gap-5'>
             
             <div className='flex flex-col font-light'>
-              <h2 className='text-l font-bold'>Contact</h2>
+              <p className='text-l font-bold'>Contact</p>
               <Link className='text-xl' href='mailto:hello@happypeers.work'>hello@happypeers.work</Link>
             </div>
 
@@ -199,7 +199,7 @@ function Home() {
               <a href="#"><p className='text-xl md:text-2xl font-bold'>onsheets.io</p></a>
             </div>
             <div className='flex flex-col font-light'>
-              <h2 className='text-l font-bold'>Boring</h2>
+              <p className='text-l font-bold'>Boring</p>
               <Link href='/privacy-policy'>Privacy Policy</Link>
               <Link href='/terms-conditions'>Terms and Conditions</Link>
             </div>
