@@ -5,3 +5,4 @@ Disallow: /feedback
 Disallow: /auth
 Disallow: /api
 Disallow: /setup
+Sitemap: https://www.happypeers.work/sitemap.xml
