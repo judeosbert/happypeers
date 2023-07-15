@@ -117,7 +117,7 @@ function Home() {
       </div>}
     >
       <div className='flex flex-col gap-3'>
-        <p>Don't worry, we will not share any information regarding you while reaching out to the HR</p>
+        <p>Don&apos;t worry, we will not share any information regarding you while reaching out to the HR</p>
         <input type='email' value={hrEmail} onChange={(e) => {
           setHrEmail(e.target.value)
         }} className="border min-w-full py-2 px-5 bg-white rounded-lg" placeholder='Enter HR email' />
