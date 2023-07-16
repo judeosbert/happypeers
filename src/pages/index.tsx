@@ -97,7 +97,7 @@ function Home() {
     } else {
       return <>
         <p className='text-5xl font-bold '>Safe space to share feedbacks</p>
-        <p className='text-xl font-light leading-7 text-gray-700 mt-4'>Share feedbacks with higher authories anonymously</p>
+        <p className='text-xl font-light leading-7 text-gray-700 mt-4'>Share feedbacks with peers & higher authorities anonymously</p>
       </>
     }
   }
